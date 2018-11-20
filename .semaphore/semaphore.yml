@@ -13,6 +13,8 @@ blocks:
         commands:
           - checkout
           - sem-service start postgres
+          - cache restore gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock),gems-$SEMAPHORE_GIT_BRANCH,gems-master
           - bundle install --deployment --path vendor/bundle
+          - cache store gems-$SEMAPHORE_GIT_BRANCH-$(checksum Gemfile.lock) vendor/bundle
           - bundle exec rake db:create db:migrate db:test:prepare
           - bundle exec rspec
